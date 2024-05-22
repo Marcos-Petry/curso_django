@@ -1,4 +1,4 @@
-# Resolvi aprender Django 
+# Um pouco sobre django
 
 ## O que é django 
 
@@ -58,7 +58,7 @@
 3. Para resolver isso é preciso baixar um pacote `pip install python-dotenv`, atualiza o requirements e ve se ele ta lá para garantir `pip freeze > requirements.txt`.
 
 4. Após baixar, criar um arquivo `.env` fora da pasta setup e dentro dele colar a variavel de ambiente
-`SECRET_KEY = django-insecure-vo6@kr)jgi2o-17s%uz!wfl4!=x1mlg93(5idzi=^!h^ap5kyu`
+`SECRET_KEY = SUA_SECRET_KEY`
 
 5. Após isso dentro do arquivo settings.py importar a classe doteenv exemplo abaixo
 ``` PY
@@ -84,3 +84,83 @@ SECRET_KEY = str(os.getenv('SECRET_KEY')) # o nome da variavel que eu defini no 
 2. O .gitignore é algo muito comum de se fazer, então já existe muitos prontos, e da de pegar eles através do **gitignore.io** um site onde eu coloco a linguagem/framework que estou codando, e ele me fornece um arquivo .gitignore pronto.
 
 3. Copiando esse arq e colando no projeto, na maioria das vezes já da de subir o projeto, mas é importante sempre verificar.
+
+## Como Subir pro git 
+
+- Na primeira vez do repositório
+
+1. `git init` criar um repositório local 
+
+2. `git add .` copia tudo pro repositório
+
+3. `git commit -m "mensagem que aparece no comit` 
+
+- Nesse momento as alterações estão no repositório local.
+
+4. Vamos acessar o repositório que criamos no Github. Nele, na seção "...or create a new repository on the command line", copiaremos a linha que traz, além de git remote add origin, o link do repositório. No meu caso, o comando era `git remote add origin https://github.com/Marcos-Petry/curso_django.git`.
+
+5. `git push origin master` aqui as alterações vão pro repositório do git.
+
+---
+
+# Projeto, app e views
+
+1. App e Projeto (startapp e startproject)
+    - APP: É uma funcionalidade, um app é um pedaço da aplicação, que faz alguma coisa, **vários apps podem formar um projeto**
+    - Projeto: Um projeto é a coleção de tudo que a gente tem, todas as configurações e etc. **um Projeto contém vários apps**.
+
+2. Como criar um app
+    - Executar o comando `python manage.py startapp NOME_APP`.
+    - Após executar o comando uma pasta é criada, e dentro dela possui vários arquivos.
+    - Agora é preciso ir até o arquivo settings.py  e em "INSTALLED_APPS" adicionar o app que foi criado.
+    - Nesse momento o app já deve ter influência sobre o projeto.
+
+3. Arquivos existentes ao criar um app
+    - ___init__.py
+
+    - admin.py
+
+    - apps.py
+
+    - models.py
+
+    - tests.py
+
+    - views.py -> responsável por tratar uma resposta e definir o que vai ser apresentado, qual página vai ser apresentada, qual o conteúdo dessa página.
+
+4. Primeiros passos, criando uma view:
+    - Dentro de views.py. Criar uma função para responder a requisição
+        ``` py
+            from django.shortcuts import render
+
+            # responsável pela página principal da aplicação
+            def index(request):
+                return render(request, 'index.html') # chama o arq html dentro de templates
+        ```
+5. Definir/configurar as rotas
+    1. Criar uma arquivo urls.py dentro do app, onde vai ficar as rotas do nosso app.
+        ``` py
+            from django.urls import path
+            from galeria.views import index # importa o método criado na view
+
+            urlpatterns = [
+                path('', index) # define o método criado na view para a rota principal.
+            ]
+        ```
+    2. Ir até o arquivo urls.py do projeto e incluir o arquivo de urls do app
+        ``` py
+            from django.contrib import admin
+            from django.urls import path, include
+
+            urlpatterns = [
+                path('admin/', admin.site.urls),
+                path('', include('galeria.urls')) # rota principal
+            ]
+        ```
+6. Templates
+    1. Criar uma pasta "templates" dentro da pasta do projeto e fora de apps e setup, ou seja, na raiz do projeto.
+    2. Ir até settings.py >> TEMPLATES e dentro de "DIR" definir o diretório da pasta templates que foi criada.
+        ``` py
+            'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        ```
+    3. Criar o arquivo dentro da pasta de templates. ex: index.html e adicionar o html desejado.
