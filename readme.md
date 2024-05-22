@@ -101,6 +101,20 @@ SECRET_KEY = str(os.getenv('SECRET_KEY')) # o nome da variavel que eu defini no 
 
 5. `git push origin master` aqui as alterações vão pro repositório do git.
 
+- Outras vezes
+
+1. `git status` para verificar.
+
+2. git add <arquivos modificados> ou `git add .` para adicionar todos.
+
+3. `git status` para verificar se tudo está ok.
+
+4. `git commit -m "Mensagem do commit"`
+
+5. `git push` envia as alterações para o repositório local.
+
+6. Nesse momento as alterações estão salvas no repositório local, para subir de fato pro git executar `git branch` para descobrir o branch e depois `git push origin <nome-do-seu-branch>`
+
 ---
 
 # Projeto, app e views
