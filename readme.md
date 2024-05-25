@@ -85,7 +85,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY')) # o nome da variavel que eu defini no 
 
 3. Copiando esse arq e colando no projeto, na maioria das vezes já da de subir o projeto, mas é importante sempre verificar.
 
-## Como Subir pro git 
+## Como Subir pro gitHub 
 
 - Na primeira vez do repositório
 
@@ -178,3 +178,51 @@ SECRET_KEY = str(os.getenv('SECRET_KEY')) # o nome da variavel que eu defini no 
             'DIRS': [os.path.join(BASE_DIR, 'templates')],
         ```
     3. Criar o arquivo dentro da pasta de templates. ex: index.html e adicionar o html desejado.
+
+# Arquivos estáticos 
+
+1. Para carregar os arquivos estáticos será necessário criar uma pasta onde ficaram TODOS os arquivos estáticos do Projeto, então dentro de setup criar uma pasta definida como 'static'.
+
+2. Ir até `settings.py` e abaixo de "STATIC_URL" criar o caminho para os arquivos estáticos.
+    ``` py
+        STATICFILES_DIRS = [
+            os.path.join(BASE_DIR, 'setup/static') # aponta para a classe "static" criada.
+        ]
+    ```
+
+3. Criar o caminho absoluto para que o diretório consiga pegar os arquivos estáticos. Para isso, vamos inserir a "raiz" dos caminhos usando:
+    ``` py
+        STATIC_ROOT = os.path.join(BASE_DIR, 'static') # o python vai tratar e criar uma pasta quando rodar o camando abaixo onde aqui aponta
+    ```
+
+- Nesse ponto se existir algum arquivo estático ele não vai estar afetando o projeto, pois é necessário rodar o comando `python manage.py collectstatic` para fazer com que o Django manipule os arquivos estáticos da aplicação, para que possamos visualizá-los. Quando executado e se tudo estiver certo uma pasta static vai ser criada na raiz do projeto
+
+4. Aceassar "templates/galeria > index.html" e adicionar o  seguinte trexo na primeira linha `{% load static %}` isso faz com que os arquivos estáticos sejam carregados.
+
+5. Também é preciso mexer na forma que o arquivo css está sendo chamado, fica algo parecido com:
+    ``` html
+        <link rel="stylesheet" href="{% static '/styles/style.css' %}">
+    ```
+    - Estamos usando código python junto ao html, o que é denominado de **embedado**
+
+6. Para todos os arquivos estáticos presente dentro do html é necessário fazer com que ele busque a informação do arquivo estático. então precisa adicionar `{% static'` na frente do caminho do arquivo e `' %}` ao final
+
+7. É importante lembrar que para cada coisa que eu to tentando chamar aqui do html lá dos arquivos estáticos esse arquivo precisa existir, e eu preciso ter o controle a partir da view e a rota criada.
+
+# Evitar repetições de código em arquivos html
+
+1. Criar arquivos bases para o html comum entre arquivos.
+
+2. No arquivo pai utilizar algo como `{% block content %}{% endblock %}` dentor do body
+
+3. Nos arquivos filhos é preciso definir aonde o bloco será aberto e onde será fechado:
+    `{% block content %} <!--Define um início de bloco()-->`
+    `{% endblock %} <!--Define o final do bloco()-->`
+
+4. Se existe muitas partes iguais no html é usado o partials "pedaços"
+de código.
+    - Criar uma classe partials dentro do nosso app.
+        - aqui é por prática sempre começar o nome do arquivo com "_" no começo exemplo: `_footer.html`;
+    
+    - A partir do momento que temos o pedaço de código pronto é necessário adicionar ele na classe base para que classes filhas utilize-o.
+        
